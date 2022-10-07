@@ -1,0 +1,42 @@
+{
+  "name": "astra-watchface",
+  "author": "Danila Isaichev",
+  "version": "1.0.0",
+  "keywords": ["pebble-app"],
+  "private": true,
+  "dependencies": {},
+  "pebble": {
+    "displayName": "astra-watchface",
+    "uuid": "12843da4-722b-4169-9dc7-d82e0ae2681e",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
+    "targetPlatforms": [
+      "aplite",
+      "basalt"
+    ],
+    "watchapp": {
+      "watchface": true
+    },
+    "capabilities": [
+      "location"
+    ],
+    "messageKeys": [
+      "TEMPERATURE",
+      "CONDITIONS"
+    ],
+    "resources": {
+      "media": [
+        {
+          "type": "font",
+          "name": "FONT_PT_ASTRA_SANS_REGULAR_24",
+          "file": "fonts/PT-Astra-Sans_Regular.ttf"
+        },
+        {
+          "type": "font",
+          "name": "FONT_PT_ASTRA_SANS_REGULAR_48",
+          "file": "fonts/PT-Astra-Sans_Regular.ttf"
+        }
+      ]
+    }
+  }
+}
