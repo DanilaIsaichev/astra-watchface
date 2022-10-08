@@ -1,3 +1,5 @@
+var myAPIKey = '068c07559fbd91d25d3fa61a8d9aabdd'
+
 var xhrRequest = function (url, type, callback) {
     var xhr = new XMLHttpRequest();
     xhr.onload = function () {
@@ -8,30 +10,33 @@ var xhrRequest = function (url, type, callback) {
 };
 
 function locationSuccess(pos) {
-    var url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + pos.coords.lalitude + '&lon=' + pos.coords.longitude + '&appid=' + myAPIKey;
+    var url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + pos.coords.latitude + '&lon=' + pos.coords.longitude + '&appid=' + myAPIKey;
 
-    xhrRequest(url, 'GET', function(responseText) {
-        var json = JSON.parse(responseText);
+    xhrRequest(url, 'GET',
+        function(responseText) {
+            var json = JSON.parse(responseText);
 
-        var temperature = Math.round(json.main.temperature - 273.15);
-        console.log(temperature);
+            console.log(responseText)
+            var temperature = Math.round(json.main.temp - 273.15);
+            console.log(temperature);
 
-        var conditions = json.weather[0].main;
-        console.log(conditions)
+            var conditions = json.weather[0].main;
+            console.log(conditions)
 
-        var dictionary = {
-            "TEMPERATURE": temperature,
-            "CONDITIONS": conditions
+            var dictionary = {
+                "TEMPERATURE": temperature,
+                "CONDITIONS": conditions
+            }
+
+            Pebble.sendAppMessage(dictionary,
+                function(e) {
+                    console.log('Weather info send to Pebble successfully!')
+                },
+                function(e) {
+                    console.log('Error sending weather info to Pebble!')
+                })
         }
-
-        Pebble.sendAppMessage(dictionary,
-            function(e) {
-                console.log('Weather info send to Pebble successfully!')
-            },
-            function(e) {
-                console.log('Error sending weather info to Pebble!')
-            })
-    })
+    );
 }
 
 function locationError(err) {

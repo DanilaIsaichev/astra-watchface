@@ -28,6 +28,11 @@
       "media": [
         {
           "type": "font",
+          "name": "FONT_PT_ASTRA_SANS_REGULAR_16",
+          "file": "fonts/PT-Astra-Sans_Regular.ttf"
+        },
+        {
+          "type": "font",
           "name": "FONT_PT_ASTRA_SANS_REGULAR_24",
           "file": "fonts/PT-Astra-Sans_Regular.ttf"
         },
