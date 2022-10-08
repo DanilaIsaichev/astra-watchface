@@ -22,19 +22,6 @@ static void update_time() {
   text_layer_set_text(s_time_layer, s_buffer);
 }
 
-static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
-  update_time();
-  if (tick_time->tm_min % 30 == 0) {
-    DictionaryIterator *iter;
-    app_message_outbox_begin(&iter);
-
-    dict_write_uint8(iter, 0, 0);
-
-    app_message_outbox_send();
-  }
-}
-
-//
 static void update_date() {
 
   time_t temp = time(NULL);
@@ -50,10 +37,22 @@ static void update_date() {
   text_layer_set_text(s_day_layer, s_day_buffer);
 }
 
-static void date_tick_handler(struct tm *tick_time, TimeUnits units_changed) {
-  update_date();
+static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
+  if( (units_changed & MINUTE_UNIT) != 0 ) {
+    update_time();
+    if (tick_time->tm_min % 30 == 0) {
+      DictionaryIterator *iter;
+      app_message_outbox_begin(&iter);
+
+      dict_write_uint8(iter, 0, 0);
+
+      app_message_outbox_send();
+    }
+  }
+  if( (units_changed & DAY_UNIT) != 0 ) {
+    update_date();
+  }
 }
-//
 
 static void main_window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
@@ -171,8 +170,7 @@ static void init() {
 
   window_stack_push(s_main_window, true);
   window_set_background_color(s_main_window, GColorBlack);
-  tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
-  tick_timer_service_subscribe(DAY_UNIT, date_tick_handler);//
+  tick_timer_service_subscribe(MINUTE_UNIT | DAY_UNIT, tick_handler);
   update_time();
   update_date();
 
